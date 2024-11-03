@@ -1,67 +1,49 @@
 function getComputerChoice() {
     let computerValue = Math.floor(Math.random() * 3);
-
-    if (computerValue === 0) {
-        return 'камень';
-    } else if (computerValue === 1) {
-        return 'ножницы';
-    } else {
-        return 'бумага';
-    }
-};
-
-function getHumanChoice() {
-    while (true) {
-        let humanValue = prompt('Введите Камень, Ножницы или Бумага').toLowerCase();
-        
-        if ((humanValue === 'камень') || (humanValue === 'ножницы') || (humanValue === 'бумага')) {
-            return humanValue;
-        } else {
-            alert('Неверный ввод. Введите Камень, Ножницы или Бумага');
-        }
-    }
+    if (computerValue === 0) return 'камень';
+    if (computerValue === 1) return 'ножницы';
+    return 'бумага';
 }
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => button.addEventListener('click', () => playGame(button)));
 
 let humanScore = 0;
 let computerScore = 0;
 
 function playRound(humanChoice, compiterChoice) {
     if (humanChoice === compiterChoice) {
-        return console.log(`Ничья! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
-    } else if (humanChoice === 'камень' && compiterChoice === 'ножницы') {
+        console.log(`Ничья! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
+    } else if (
+        (humanChoice === 'камень' && compiterChoice === 'ножницы') ||
+        (humanChoice === 'ножницы' && compiterChoice === 'бумага')||
+        (humanChoice === 'бумага' && compiterChoice === 'камень')
+    ) {
         humanScore += 1;
-        return console.log(`Победа! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
-    } else if (humanChoice === 'ножницы' && compiterChoice === 'бумага') {
-        humanScore += 1;
-        return console.log(`Победа! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
-    } else if (humanChoice === 'бумага' && compiterChoice === 'камень') {
-        humanScore += 1;
-        return console.log(`Победа! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
+        console.log(`Победа! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
     } else {
         computerScore += 1;
-        return console.log(`Поражение! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
+    console.log(`Поражение! Человек: "${humanChoice}" | Компьютер: "${compiterChoice}"`);
     }
 }
 
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
+function playGame(button) {
+    const humanSelection = button.id;
+    const computerSelection = getComputerChoice();
 
-        console.log(`Раунд #${i + 1}`);
-        playRound(humanSelection, computerSelection);
-    }
+    playRound(humanSelection, computerSelection);
 
-    console.log('ИТОГ ИГРЫ:');
 
-    if (humanScore > computerScore) {
-        console.log(`ПОБЕДА! Человек - ${humanScore} : ${computerScore} - Компьютер`);
-    } else if (humanScore < computerScore) {
-        console.log(`ПОРАЖЕНИЕ! Человек - ${humanScore} : ${computerScore} - Компьютер`);
-    } else {
-        console.log(`НИЧЬЯ! Человек - ${humanScore} : ${computerScore} - Компьютер`);
+    console.log(`Текущий счет: Человек - ${humanScore} : ${computerScore} - Компьютер`);
+
+    if (humanScore === 5 || computerScore === 5) {
+        if (humanScore > computerScore) {
+            console.log(`ПОБЕДА! Человек - ${humanScore} : ${computerScore} - Компьютер`);
+        } else {
+            console.log(`ПОРАЖЕНИЕ! Человек - ${humanScore} : ${computerScore} - Компьютер`);
+        }
+        humanScore = 0;
+        computerScore = 0;
     }
 
 }
-
-playGame();
